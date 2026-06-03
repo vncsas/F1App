@@ -41,10 +41,9 @@ class _SplashScreenState extends State<SplashScreen> {
             child: _linhaDecorativa(),
           ),
           Center(
-            child: Image.network(
-              "https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/F1.svg/2560px-F1.svg.png",
-              width: 180,
-              color: Color(0xFFE8002D),
+            child: Image.asset(
+              "assets/images/f1_logo.png",
+              width: 220,
             ),
           ),
 
