@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'equipe.dart';
+import '../models/equipe.dart';
 
 class TelaDetalheEquipe extends StatelessWidget {
   final Equipe equipe;

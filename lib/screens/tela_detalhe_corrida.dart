@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'corrida.dart';
+import '../models/corrida.dart';
 
 class TelaDetalheCorrida extends StatelessWidget {
   final Corrida corrida;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'piloto.dart';
+import '../models/piloto.dart';
 
 class TelaDetalhePiloto extends StatelessWidget {
   final Piloto piloto;

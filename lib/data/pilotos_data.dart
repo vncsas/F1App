@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'piloto.dart';
+import '../models/piloto.dart';
 
 List<Piloto> pilotosIniciais = [
   Piloto(

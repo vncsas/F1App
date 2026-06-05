@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'equipe.dart';
+import '../models/equipe.dart';
 
 class CardEquipe extends StatelessWidget {
   final Equipe equipe;

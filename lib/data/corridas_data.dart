@@ -1,4 +1,4 @@
-import 'corrida.dart';
+import '../models/corrida.dart';
 
 List<Corrida> corridasIniciais = [
   Corrida(

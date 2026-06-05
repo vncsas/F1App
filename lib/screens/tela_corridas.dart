@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'corrida.dart';
-import 'corridas_data.dart';
-import 'card_corrida.dart';
+import '../models/corrida.dart';
+import '../data/corridas_data.dart';
+import '../components/card_corrida.dart';
 import 'tela_detalhe_corrida.dart';
 import 'tela_classificacao.dart';
 

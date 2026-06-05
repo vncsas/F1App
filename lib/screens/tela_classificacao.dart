@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'piloto.dart';
-import 'pilotos_data.dart';
-import 'card_piloto.dart';
+import '../models/piloto.dart';
+import '../data/pilotos_data.dart';
+import '../components/card_piloto.dart';
 import 'tela_detalhe_piloto.dart';
-import 'equipe.dart';
-import 'equipes_data.dart';
-import 'card_equipe.dart';
+import '../models/equipe.dart';
+import '../data/equipes_data.dart';
+import '../components/card_equipe.dart';
 import 'tela_detalhe_equipe.dart';
 import 'tela_corridas.dart';
 
