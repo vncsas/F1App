@@ -1,4 +1,3 @@
-// tela_detalhe_piloto.dart
 import 'package:flutter/material.dart';
 import 'piloto.dart';
 
@@ -12,7 +11,7 @@ class TelaDetalhePiloto extends StatelessWidget {
     return Scaffold(
       backgroundColor: Color(0xFF111111),
       appBar: AppBar(
-        title: Text("Driver Details"),
+        title: Text("Detalhes do Piloto"),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.pop(context),
@@ -107,11 +106,11 @@ class TelaDetalhePiloto extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            _itemEstatistica("Standing", "${piloto.posicao}º"),
+            _itemEstatistica("Colocação", "${piloto.posicao}º"),
             _divisor(),
-            _itemEstatistica("Podiums", "${piloto.podios}"),
+            _itemEstatistica("Pódios", "${piloto.podios}"),
             _divisor(),
-            _itemEstatistica("Points", "${piloto.pontos}"),
+            _itemEstatistica("Pontos", "${piloto.pontos}"),
           ],
         ),
       ),

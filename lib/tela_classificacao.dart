@@ -3,6 +3,11 @@ import 'piloto.dart';
 import 'pilotos_data.dart';
 import 'card_piloto.dart';
 import 'tela_detalhe_piloto.dart';
+import 'equipe.dart';
+import 'equipes_data.dart';
+import 'card_equipe.dart';
+import 'tela_detalhe_equipe.dart';
+import 'tela_corridas.dart';
 
 class TelaClassificacao extends StatefulWidget {
   @override
@@ -11,9 +16,8 @@ class TelaClassificacao extends StatefulWidget {
 
 class _TelaClassificacaoState extends State<TelaClassificacao>
     with SingleTickerProviderStateMixin {
-
   late TabController _tabController;
-  int _indiceBottomNav = 2;         
+  int _indiceBottomNav = 0;
 
   @override
   void initState() {
@@ -23,7 +27,7 @@ class _TelaClassificacaoState extends State<TelaClassificacao>
 
   @override
   void dispose() {
-    _tabController.dispose();  
+    _tabController.dispose();
     super.dispose();
   }
 
@@ -35,8 +39,8 @@ class _TelaClassificacaoState extends State<TelaClassificacao>
         title: Text("Classificação"),
         bottom: TabBar(
           controller: _tabController,
-          indicatorColor: Color(0xFFE8002D), 
-          labelColor: Color(0xFFE8002D),    
+          indicatorColor: Color(0xFFE8002D),
+          labelColor: Color(0xFFE8002D),
           unselectedLabelColor: Colors.white38,
           tabs: [
             Tab(text: "Pilotos"),
@@ -47,10 +51,7 @@ class _TelaClassificacaoState extends State<TelaClassificacao>
 
       body: TabBarView(
         controller: _tabController,
-        children: [
-          _listaPilotos(),                      
-          _telaEquipesEmBreve(),                 
-        ],
+        children: [_listaPilotos(), _listaEquipes()],
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Color(0xFF1A1A1A),
@@ -58,22 +59,25 @@ class _TelaClassificacaoState extends State<TelaClassificacao>
         unselectedItemColor: Colors.white38,
         currentIndex: _indiceBottomNav,
         onTap: (index) {
-          setState(() {
-            _indiceBottomNav = index;
-          });
+          if (index == 1) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => TelaCorridas()),
+            );
+          } else {
+            setState(() {
+              _indiceBottomNav = index;
+            });
+          }
         },
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.article_outlined),
-            label: "News",
+            icon: Icon(Icons.emoji_events_outlined),
+            label: "Classificação",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.flag_outlined),
-            label: "Races",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.emoji_events_outlined),
-            label: "Classificação",
+            label: "Corridas",
           ),
         ],
       ),
@@ -91,9 +95,8 @@ class _TelaClassificacaoState extends State<TelaClassificacao>
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => TelaDetalhePiloto(
-                  piloto: pilotosIniciais[index],
-                ),
+                builder: (context) =>
+                    TelaDetalhePiloto(piloto: pilotosIniciais[index]),
               ),
             );
           },
@@ -102,19 +105,25 @@ class _TelaClassificacaoState extends State<TelaClassificacao>
     );
   }
 
-  Widget _telaEquipesEmBreve() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.construction, color: Colors.white24, size: 60),
-          SizedBox(height: 16),
-          Text(
-            "Em breve...",
-            style: TextStyle(color: Colors.white38, fontSize: 18),
-          ),
-        ],
-      ),
+  Widget _listaEquipes() {
+    return ListView.builder(
+      padding: EdgeInsets.symmetric(vertical: 12),
+      
+      itemCount: equipesIniciais.length,
+      itemBuilder: (context, index) {
+        return CardEquipe(
+          equipe: equipesIniciais[index],
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    TelaDetalheEquipe(equipe: equipesIniciais[index]),
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }
