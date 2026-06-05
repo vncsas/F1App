@@ -1,4 +1,3 @@
-// tela_detalhe_piloto.dart
 import 'package:flutter/material.dart';
 import 'piloto.dart';
 
