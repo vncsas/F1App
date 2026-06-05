@@ -1,30 +1,68 @@
 # F1 App
 
-Aplicativo Flutter de classificação da Fórmula 1. Exibe lista de pilotos, pontuação, equipe e detalhes individuais com tema escuro inspirado na identidade visual da F1.
+Aplicativo Flutter de Fórmula 1. Exibe classificação de pilotos e equipes, calendário de corridas e detalhes individuais, com tema escuro inspirado na identidade visual da F1.
 
 ## Funcionalidades
 
 - **Splash screen** com logo F1 e transição automática para a tela principal.
-- **Classificação de Pilotos** em lista, com gradiente personalizado por equipe, posição, pontos e foto.
-- **Detalhes do Piloto**: cabeçalho com imagem, estatísticas (posição, pódios, pontos), card da equipe e seção de pódios recentes.
-- **Tabs**: Pilotos e Equipes (em breve).
-- **Bottom Navigation**: News, Races, Classificação.
+- **Classificação** em abas:
+  - **Pilotos**: lista com gradiente por equipe, posição, pontos e foto.
+  - **Equipes**: lista de construtores com motor, posição, pontos e pilotos.
+- **Detalhes do Piloto**: cabeçalho com imagem, estatísticas (colocação, pódios, pontos), card da equipe e seção de pódios recentes.
+- **Detalhes da Equipe**: cabeçalho com imagem do carro, estatísticas, lista de pilotos e informações técnicas.
+- **Corridas**: lista de GPs da temporada com bandeira, data, circuito e status (realizada/aguardando).
+- **Detalhes da Corrida**: cabeçalho com bandeira e badge de status, informações do GP e vencedor (ou aguardando).
+- **Bottom Navigation** entre Classificação e Corridas.
 
 ## Estrutura do Projeto
 
 ```
 lib/
-├── main.dart                    # Entry point — runApp(F1App())
-├── f1_app.dart                  # MaterialApp + tema escuro F1
-├── splash_screen.dart           # Tela inicial com logo + transição
-├── piloto.dart                  # Modelo Piloto
-├── pilotos_data.dart            # Lista estática de pilotos
-├── card_piloto.dart             # Widget de card na listagem
-├── tela_classificacao.dart      # Tela principal (Tabs + lista)
-└── tela_detalhe_piloto.dart     # Tela de detalhes do piloto
+├── main.dart                       # Entry point — runApp(F1App())
+├── f1_app.dart                     # MaterialApp + tema escuro F1
+│
+├── models/                         # Modelos de dados (POJOs)
+│   ├── piloto.dart
+│   ├── equipe.dart
+│   └── corrida.dart
+│
+├── data/                           # Dados estáticos (mock)
+│   ├── pilotos_data.dart
+│   ├── equipes_data.dart
+│   └── corridas_data.dart
+│
+├── screens/                        # Telas completas (rotas)
+│   ├── splash_screen.dart
+│   ├── tela_classificacao.dart
+│   ├── tela_detalhe_piloto.dart
+│   ├── tela_detalhe_equipe.dart
+│   ├── tela_corridas.dart
+│   └── tela_detalhe_corrida.dart
+│
+└── components/                     # Widgets reutilizáveis
+    ├── card_piloto.dart
+    ├── card_equipe.dart
+    └── card_corrida.dart
 ```
 
-## Modelo `Piloto`
+### Por que essa arquitetura?
+
+Separação por responsabilidade — cada pasta tem um papel claro:
+
+- **`models/`** — define **o quê** (estrutura dos dados). Classes puras, sem lógica de UI nem fonte de dados.
+- **`data/`** — define **de onde** vêm os dados. Hoje é mock estático; amanhã pode virar repositório de API/banco sem tocar nas telas.
+- **`screens/`** — define **onde** o usuário está (rotas / páginas inteiras com `Scaffold`).
+- **`components/`** — define **partes reutilizáveis** das telas (cards, itens de lista, badges). Recebem dados via parâmetro, não conhecem fonte.
+
+Benefícios práticos:
+- Encontrar arquivo rápido pelo nome da pasta.
+- Trocar `data/` por API real sem mexer em telas ou componentes.
+- Reaproveitar componentes em telas novas sem duplicação.
+- Escala bem conforme novas telas (Notícias, Estatísticas, Favoritos…) forem adicionadas.
+
+## Modelos
+
+### `Piloto`
 
 | Campo          | Tipo     | Descrição                          |
 |----------------|----------|------------------------------------|
@@ -37,6 +75,32 @@ lib/
 | `posicao`      | int      | Colocação no campeonato            |
 | `pontos`       | int      | Pontos acumulados                  |
 | `podios`       | int      | Quantidade de pódios               |
+
+### `Equipe`
+
+| Campo         | Tipo           | Descrição                       |
+|---------------|----------------|---------------------------------|
+| `nome`        | String         | Nome da escuderia               |
+| `cor`         | String         | Cor descritiva                  |
+| `corEquipe`   | Color          | Cor primária do time            |
+| `motor`       | String         | Fornecedor de motor             |
+| `posicao`     | int            | Colocação no campeonato         |
+| `pontos`      | int            | Pontos acumulados               |
+| `pilotos`     | List\<String\> | Pilotos titulares               |
+| `imagemCarro` | String         | URL da imagem do carro          |
+
+### `Corrida`
+
+| Campo             | Tipo   | Descrição                                |
+|-------------------|--------|------------------------------------------|
+| `nomePais`        | String | País sede do GP                          |
+| `nomeGP`          | String | Nome oficial do Grande Prêmio            |
+| `circuito`        | String | Nome do circuito                         |
+| `data`            | String | Data da corrida                          |
+| `vencedor`        | String | Piloto vencedor (vazio se não realizada) |
+| `equipeVencedora` | String | Equipe do vencedor                       |
+| `bandeira`        | String | Emoji da bandeira do país                |
+| `realizada`       | bool   | Indica se já ocorreu                     |
 
 ## Requisitos
 
@@ -82,11 +146,12 @@ flutter test
 
 ## Próximos Passos
 
-- Aba **Equipes** com classificação de construtores.
-- Telas **News** e **Races**.
 - Integração com API real (ex: Ergast / F1 oficial).
 - Persistência local de favoritos.
+- Tela de notícias.
+- Estatísticas históricas por piloto / equipe.
 
 ## Autor
 
-Vinícius Salves
+Vinícius Santana
+Thiago Gabriel
