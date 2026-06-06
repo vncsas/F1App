@@ -79,11 +79,11 @@ class Piloto {
     else if (nomeLower.contains('mclaren')) nomeOficial = 'mclaren';
     else if (nomeLower.contains('aston martin')) nomeOficial = 'aston-martin';
     else if (nomeLower.contains('alpine')) nomeOficial = 'alpine';
-    else if (nomeLower.contains('haas')) nomeOficial = 'haas';
+    else if (nomeLower.contains('haas')) nomeOficial = 'haas-f1-team';
     else if (nomeLower.contains('williams')) nomeOficial = 'williams';
     else if (nomeLower.contains('sauber') || nomeLower.contains('alfa') || nomeLower.contains('audi')) nomeOficial = 'alfa-romeo';
     else if (nomeLower.contains('rb') || nomeLower.contains('racing bulls') || nomeLower.contains('alphatauri')) nomeOficial = 'alphatauri';
-    else if (nomeLower.contains('cadillac')) nomeOficial = 'haas';
+    else if (nomeLower.contains('cadillac')) nomeOficial = 'haas-f1-team';
 
     return 'https://media.formula1.com/image/upload/f_auto/q_auto/v1677245030/content/dam/fom-website/teams/2023/$nomeOficial.png';
   }

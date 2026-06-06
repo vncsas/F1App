@@ -27,9 +27,12 @@ class CardCorrida extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  corrida.bandeira,
-                  style: TextStyle(fontSize: 32),
+                Hero(
+                  tag: 'bandeira-${corrida.nomeGP}',
+                  child: Text(
+                    corrida.bandeira,
+                    style: TextStyle(fontSize: 32),
+                  ),
                 ),
                 SizedBox(height: 4),
                 Text(

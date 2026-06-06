@@ -55,9 +55,12 @@ class TelaDetalheCorrida extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Text(
-            corrida.bandeira,
-            style: TextStyle(fontSize: 64),
+          Hero(
+            tag: 'bandeira-${corrida.nomeGP}',
+            child: Text(
+              corrida.bandeira,
+              style: TextStyle(fontSize: 64),
+            ),
           ),
           SizedBox(height: 12),
           Text(
