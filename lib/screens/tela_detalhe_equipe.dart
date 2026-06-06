@@ -42,10 +42,7 @@ class TelaDetalheEquipe extends StatelessWidget {
       height: 220,
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [
-            equipe.corEquipe.withOpacity(0.8),
-            Color(0xFF111111),
-          ],
+          colors: [equipe.corEquipe.withOpacity(0.8), Color(0xFF111111)],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
@@ -85,14 +82,6 @@ class TelaDetalheEquipe extends StatelessWidget {
                     letterSpacing: 2,
                   ),
                 ),
-                SizedBox(height: 4),
-                Text(
-                  "Motor: ${equipe.motor}",
-                  style: TextStyle(
-                    color: Colors.white60,
-                    fontSize: 14,
-                  ),
-                ),
               ],
             ),
           ),
@@ -127,10 +116,7 @@ class TelaDetalheEquipe extends StatelessWidget {
   Widget _itemEstatistica(String label, String valor) {
     return Column(
       children: [
-        Text(
-          label,
-          style: TextStyle(color: Colors.white38, fontSize: 13),
-        ),
+        Text(label, style: TextStyle(color: Colors.white38, fontSize: 13)),
         SizedBox(height: 8),
         Text(
           valor,
@@ -145,11 +131,7 @@ class TelaDetalheEquipe extends StatelessWidget {
   }
 
   Widget _divisor() {
-    return Container(
-      width: 1,
-      height: 40,
-      color: Colors.white12,
-    );
+    return Container(width: 1, height: 40, color: Colors.white12);
   }
 
   Widget _secaoPilotos() {
@@ -175,10 +157,7 @@ class TelaDetalheEquipe extends StatelessWidget {
                 color: Color(0xFF1A1A1A),
                 borderRadius: BorderRadius.circular(12),
                 border: Border(
-                  left: BorderSide(
-                    color: equipe.corEquipe,
-                    width: 4,
-                  ),
+                  left: BorderSide(color: equipe.corEquipe, width: 4),
                 ),
               ),
               child: Row(
@@ -192,11 +171,7 @@ class TelaDetalheEquipe extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  Icon(
-                    Icons.person,
-                    color: equipe.corEquipe,
-                    size: 20,
-                  ),
+                  Icon(Icons.person, color: equipe.corEquipe, size: 20),
                 ],
               ),
             );
@@ -221,8 +196,7 @@ class TelaDetalheEquipe extends StatelessWidget {
             ),
           ),
           SizedBox(height: 12),
-          _itemInfo("Motor", equipe.motor),
-          _itemInfo("Cor", equipe.cor),
+          _itemInfo("País", equipe.cor),
           _itemInfo("Pilotos", equipe.pilotos.join(" e ")),
         ],
       ),
@@ -240,14 +214,8 @@ class TelaDetalheEquipe extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            label,
-            style: TextStyle(color: Colors.white38, fontSize: 14),
-          ),
-          Text(
-            valor,
-            style: TextStyle(color: Colors.white, fontSize: 14),
-          ),
+          Text(label, style: TextStyle(color: Colors.white38, fontSize: 14)),
+          Text(valor, style: TextStyle(color: Colors.white, fontSize: 14)),
         ],
       ),
     );

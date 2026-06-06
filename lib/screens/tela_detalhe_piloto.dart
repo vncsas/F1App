@@ -108,7 +108,7 @@ class TelaDetalhePiloto extends StatelessWidget {
           children: [
             _itemEstatistica("Colocação", "${piloto.posicao}º"),
             _divisor(),
-            _itemEstatistica("Pódios", "${piloto.podios}"),
+            _itemEstatistica("Vitórias", "${piloto.vitorias}"),
             _divisor(),
             _itemEstatistica("Pontos", "${piloto.pontos}"),
           ],
@@ -173,7 +173,14 @@ class TelaDetalhePiloto extends StatelessWidget {
                 ),
               ],
             ),
-            Icon(Icons.directions_car, color: piloto.corEquipe, size: 48),
+            Image.network(
+              piloto.logoEquipe,
+              width: 80,
+              height: 48,
+              fit: BoxFit.contain,
+              errorBuilder: (context, error, stackTrace) =>
+                  Icon(Icons.directions_car, color: piloto.corEquipe, size: 48),
+            ),
           ],
         ),
       ),
@@ -187,7 +194,7 @@ class TelaDetalhePiloto extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Pódios",
+            "Vitórias",
             style: TextStyle(
               color: Colors.white,
               fontSize: 22,
@@ -195,7 +202,7 @@ class TelaDetalhePiloto extends StatelessWidget {
             ),
           ),
           SizedBox(height: 12),
-          ...List.generate(piloto.podios.clamp(0, 3), (index) {
+          ...List.generate(piloto.vitorias.clamp(0, 3), (index) {
             return _itemPodio(index + 1);
           }),
         ],

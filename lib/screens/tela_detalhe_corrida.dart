@@ -227,6 +227,62 @@ class TelaDetalheCorrida extends StatelessWidget {
               ],
             ),
           ),
+          if (corrida.voltaMaisRapida != '-') ...[
+            SizedBox(height: 12),
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Color(0xFF1A1A1A),
+                borderRadius: BorderRadius.circular(12),
+                border: Border(
+                  left: BorderSide(
+                    color: Color(0xFFB026FF),
+                    width: 4,
+                  ),
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.timer,
+                        color: Color(0xFFB026FF),
+                        size: 28,
+                      ),
+                      SizedBox(width: 12),
+                      Text(
+                        "Volta Mais Rápida",
+                        style: TextStyle(
+                          color: Colors.white38,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 12),
+                  Text(
+                    corrida.voltaMaisRapida,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    corrida.pilotoVoltaMaisRapida,
+                    style: TextStyle(
+                      color: Colors.white60,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ],
       ),
     );

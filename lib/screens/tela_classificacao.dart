@@ -1,13 +1,13 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import '../models/piloto.dart';
-import '../data/pilotos_data.dart';
-import '../components/card_piloto.dart';
-import 'tela_detalhe_piloto.dart';
-import '../models/equipe.dart';
-import '../data/equipes_data.dart';
 import '../components/card_equipe.dart';
-import 'tela_detalhe_equipe.dart';
+import '../components/card_piloto.dart';
+import '../data/f1_api_service.dart';
+import '../models/equipe.dart';
+import '../models/piloto.dart';
 import 'tela_corridas.dart';
+import 'tela_detalhe_equipe.dart';
+import 'tela_detalhe_piloto.dart';
 
 class TelaClassificacao extends StatefulWidget {
   @override
@@ -17,12 +17,65 @@ class TelaClassificacao extends StatefulWidget {
 class _TelaClassificacaoState extends State<TelaClassificacao>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  late F1ApiService _apiService;
+  late Future<List<Piloto>> _pilotosFuture;
+  late Future<List<Equipe>> _equipesFuture;
   int _indiceBottomNav = 0;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _apiService = F1ApiService(Dio());
+    _pilotosFuture = _apiService.getDrivers();
+    _equipesFuture = _loadEquipes();
+  }
+
+  Future<List<Equipe>> _loadEquipes() async {
+    final teams = await _apiService.getTeams();
+    final pilotos = await _pilotosFuture;
+
+    final equipesIncompletas = teams.map((team) {
+      final equipe = Equipe.fromTeamModel(team);
+      double pontos = 0;
+      List<String> nomesPilotos = [];
+      
+      for (final p in pilotos) {
+        if (p.equipe.toLowerCase() == equipe.nome.toLowerCase() || p.teamId == team.teamId) {
+          pontos += p.pontos;
+          nomesPilotos.add(p.nome);
+        }
+      }
+      return Equipe(
+        nome: equipe.nome,
+        cor: equipe.cor,
+        corEquipe: equipe.corEquipe,
+        motor: equipe.motor,
+        posicao: 0,
+        pontos: pontos,
+        pilotos: nomesPilotos,
+        imagemCarro: equipe.imagemCarro,
+      );
+    }).toList();
+
+    equipesIncompletas.sort((a, b) => b.pontos.compareTo(a.pontos));
+    
+    final equipes = <Equipe>[];
+    for (int i = 0; i < equipesIncompletas.length; i++) {
+      final eq = equipesIncompletas[i];
+      equipes.add(Equipe(
+        nome: eq.nome,
+        cor: eq.cor,
+        corEquipe: eq.corEquipe,
+        motor: eq.motor,
+        posicao: i + 1,
+        pontos: eq.pontos,
+        pilotos: eq.pilotos,
+        imagemCarro: eq.imagemCarro,
+      ));
+    }
+    
+    return equipes;
   }
 
   @override
@@ -48,7 +101,6 @@ class _TelaClassificacaoState extends State<TelaClassificacao>
           ],
         ),
       ),
-
       body: TabBarView(
         controller: _tabController,
         children: [_listaPilotos(), _listaEquipes()],
@@ -85,19 +137,40 @@ class _TelaClassificacaoState extends State<TelaClassificacao>
   }
 
   Widget _listaPilotos() {
-    return ListView.builder(
-      padding: EdgeInsets.symmetric(vertical: 12),
-      itemCount: pilotosIniciais.length,
-      itemBuilder: (context, index) {
-        return CardPiloto(
-          piloto: pilotosIniciais[index],
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    TelaDetalhePiloto(piloto: pilotosIniciais[index]),
-              ),
+    return FutureBuilder<List<Piloto>>(
+      future: _pilotosFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return Center(
+            child: CircularProgressIndicator(
+              color: Color(0xFFE8002D),
+            ),
+          );
+        }
+
+        if (snapshot.hasError) {
+          return _buildMessage("Erro ao carregar pilotos.");
+        }
+
+        final pilotos = snapshot.data;
+        if (pilotos == null || pilotos.isEmpty) {
+          return _buildMessage("Nenhum piloto encontrado.");
+        }
+
+        return ListView.builder(
+          padding: EdgeInsets.symmetric(vertical: 12),
+          itemCount: pilotos.length,
+          itemBuilder: (context, index) {
+            return CardPiloto(
+              piloto: pilotos[index],
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TelaDetalhePiloto(piloto: pilotos[index]),
+                  ),
+                );
+              },
             );
           },
         );
@@ -106,24 +179,60 @@ class _TelaClassificacaoState extends State<TelaClassificacao>
   }
 
   Widget _listaEquipes() {
-    return ListView.builder(
-      padding: EdgeInsets.symmetric(vertical: 12),
-      
-      itemCount: equipesIniciais.length,
-      itemBuilder: (context, index) {
-        return CardEquipe(
-          equipe: equipesIniciais[index],
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    TelaDetalheEquipe(equipe: equipesIniciais[index]),
-              ),
+    return FutureBuilder<List<Equipe>>(
+      future: _equipesFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return Center(
+            child: CircularProgressIndicator(
+              color: Color(0xFFE8002D),
+            ),
+          );
+        }
+
+        if (snapshot.hasError) {
+          return _buildMessage("Erro ao carregar equipes.");
+        }
+
+        final equipes = snapshot.data;
+        if (equipes == null || equipes.isEmpty) {
+          return _buildMessage("Nenhuma equipe encontrada.");
+        }
+
+        return ListView.builder(
+          padding: EdgeInsets.symmetric(vertical: 12),
+          itemCount: equipes.length,
+          itemBuilder: (context, index) {
+            return CardEquipe(
+              equipe: equipes[index],
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TelaDetalheEquipe(equipe: equipes[index]),
+                  ),
+                );
+              },
             );
           },
         );
       },
+    );
+  }
+
+  Widget _buildMessage(String message) {
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 24),
+        child: Text(
+          message,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.white54,
+            fontSize: 16,
+          ),
+        ),
+      ),
     );
   }
 }

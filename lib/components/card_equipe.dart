@@ -17,7 +17,7 @@ class CardEquipe extends StatelessWidget {
       onTap: onTap,
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        height: 110,
+        height: 130,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           gradient: LinearGradient(
@@ -49,10 +49,10 @@ class CardEquipe extends StatelessWidget {
                     ),
                     SizedBox(height: 4),
                     Text(
-                      equipe.motor,
+                      "${Equipe.getFlag(equipe.cor)} ${equipe.cor}",
                       style: TextStyle(
                         color: Colors.white60,
-                        fontSize: 12,
+                        fontSize: 14,
                       ),
                     ),
                     SizedBox(height: 6),
@@ -91,19 +91,39 @@ class CardEquipe extends StatelessWidget {
 
             Padding(
               padding: EdgeInsets.only(right: 16),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: equipe.pilotos.map((piloto) {
-                  return Text(
-                    piloto.split(" ").last.toUpperCase(),
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  );
-                }).toList(),
+              child: Row(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: equipe.pilotos.map((piloto) {
+                      return Text(
+                        piloto.split(" ").last.toUpperCase(),
+                        style: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                  SizedBox(width: 16),
+                  Image.network(
+                    equipe.imagemCarro,
+                    width: 100,
+                    height: 50,
+                    fit: BoxFit.contain,
+                    errorBuilder: (context, error, stackTrace) {
+                      debugPrint('Erro ao carregar carro da equipe: $error');
+                      return Container(
+                        width: 100,
+                        height: 50,
+                        color: Colors.white10,
+                        child: Icon(Icons.directions_car, color: Colors.white30),
+                      );
+                    },
+                  ),
+                ],
               ),
             ),
           ],

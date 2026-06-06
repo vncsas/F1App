@@ -17,7 +17,7 @@ class CardPiloto extends StatelessWidget {
       onTap: onTap,
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        height: 140,
+        height: 160,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           gradient: LinearGradient(
@@ -102,13 +102,16 @@ class CardPiloto extends StatelessWidget {
               child: Image.network(
                 piloto.imagem,
                 width: 120,
-                height: 140,
+                height: 160,
                 fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => Container(
-                  width: 120,
-                  color: Colors.white10,
-                  child: Icon(Icons.person, color: Colors.white30, size: 40),
-                ),
+                errorBuilder: (context, error, stackTrace) {
+                  debugPrint('Erro ao carregar imagem do piloto: \$error');
+                  return Container(
+                    width: 120,
+                    color: Colors.white10,
+                    child: Icon(Icons.person, color: Colors.white30, size: 40),
+                  );
+                },
               ),
             ),
 
