@@ -22,8 +22,8 @@ class CardEquipe extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           gradient: LinearGradient(
             colors: [
-              equipe.corEquipe.withValues(alpha:0.9),
-              equipe.corEquipe.withValues(alpha:0.3),
+              equipe.cor.withValues(alpha:0.9),
+              equipe.cor.withValues(alpha:0.3),
               Colors.transparent,
             ],
             begin: Alignment.centerLeft,
@@ -49,7 +49,7 @@ class CardEquipe extends StatelessWidget {
                     ),
                     SizedBox(height: 4),
                     Text(
-                      "${Equipe.getFlag(equipe.cor)} ${equipe.cor}",
+                      "${Equipe.bandeiraDoPais(equipe.nacionalidade)} ${equipe.nacionalidade}",
                       style: TextStyle(
                         color: Colors.white60,
                         fontSize: 14,
@@ -109,7 +109,7 @@ class CardEquipe extends StatelessWidget {
                   ),
                   SizedBox(width: 16),
                   Image.network(
-                    equipe.imagemCarro,
+                    equipe.urlCarro,
                     width: 100,
                     height: 50,
                     fit: BoxFit.contain,

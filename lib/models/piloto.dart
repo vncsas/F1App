@@ -31,81 +31,107 @@ class Piloto {
   });
 
   factory Piloto.fromJson(Map<String, dynamic> json) {
-    final driverData = json['driver'] as Map<String, dynamic>? ?? const {};
-    var firstName = driverData['name']?.toString() ?? '';
-    var lastName = driverData['surname']?.toString() ?? '';
+    final dadosPiloto = json['driver'] as Map<String, dynamic>? ?? const {};
+    var primeiroNome = dadosPiloto['name']?.toString() ?? '';
+    var sobrenome = dadosPiloto['surname']?.toString() ?? '';
 
-    if (firstName.toLowerCase() == 'andrea' && lastName.toLowerCase().contains('antonelli')) {
-      firstName = 'Kimi';
-      lastName = 'Antonelli';
+    if (primeiroNome.toLowerCase() == 'andrea' &&
+        sobrenome.toLowerCase().contains('antonelli')) {
+      primeiroNome = 'Kimi';
+      sobrenome = 'Antonelli';
     }
 
-    var equipeNome = 'Desconhecida';
-    var teamIdValue = '';
-    final team = json['team'];
-    if (team is Map<String, dynamic>) {
-      equipeNome = (team['teamName'] ?? team['teamId'] ?? 'Desconhecida').toString();
-      teamIdValue = team['teamId']?.toString() ?? _slug(equipeNome);
-    } else if (team != null) {
-      equipeNome = team.toString();
-      teamIdValue = _slug(equipeNome);
+    if (sobrenome.toLowerCase().contains('pérez') ||
+        sobrenome.toLowerCase().contains('perez')) {
+      primeiroNome = 'Sergio';
+      sobrenome = 'Perez';
+    }
+
+    var nomeEquipe = 'Desconhecida';
+    var idEquipe = '';
+    final dadosEquipe = json['team'];
+
+    if (dadosEquipe is Map<String, dynamic>) {
+      nomeEquipe =
+          (dadosEquipe['teamName'] ?? dadosEquipe['teamId'] ?? 'Desconhecida')
+              .toString();
+      idEquipe = dadosEquipe['teamId']?.toString() ?? _gerarSlug(nomeEquipe);
+    } else if (dadosEquipe != null) {
+      nomeEquipe = dadosEquipe.toString();
+      idEquipe = _gerarSlug(nomeEquipe);
     } else if (json['teamId'] != null) {
-      equipeNome = json['teamId'].toString();
-      teamIdValue = equipeNome;
+      nomeEquipe = json['teamId'].toString();
+      idEquipe = nomeEquipe;
     }
 
     return Piloto(
       driverId: json['driverId']?.toString() ?? '',
-      teamId: teamIdValue,
-      nome: '$firstName $lastName'.trim(),
-      equipe: equipeNome,
-      nacionalidade: driverData['nationality']?.toString() ?? 'Desconhecida',
-      numero: int.tryParse(driverData['number']?.toString() ?? '') ?? 0,
+      teamId: idEquipe,
+      nome: '$primeiroNome $sobrenome'.trim(),
+      equipe: nomeEquipe,
+      nacionalidade: dadosPiloto['nationality']?.toString() ?? 'Desconhecida',
+      numero: int.tryParse(dadosPiloto['number']?.toString() ?? '') ?? 0,
       posicao: int.tryParse(json['position']?.toString() ?? '') ?? 0,
       pontos: double.tryParse(json['points']?.toString() ?? '') ?? 0.0,
       vitorias: int.tryParse(json['wins']?.toString() ?? '') ?? 0,
-      imagem: _buildImageUrl(firstName, lastName),
-      corEquipe: teamColor(equipeNome),
-      logoEquipe: teamLogo(equipeNome),
+      imagem: _montarUrlFoto(primeiroNome, sobrenome),
+      corEquipe: corDaEquipe(nomeEquipe),
+      logoEquipe: carroDaEquipe(nomeEquipe),
     );
   }
 
-  static String _slug(String raw) => raw.trim().toLowerCase().replaceAll(' ', '-');
+  static String _gerarSlug(String texto) =>
+      texto.trim().toLowerCase().replaceAll(' ', '-');
 
-  static String _buildImageUrl(String firstName, String lastName) {
-    if (firstName.isEmpty || lastName.isEmpty) return '';
+  static String _montarUrlFoto(String primeiroNome, String sobrenome) {
+    if (primeiroNome.isEmpty || sobrenome.isEmpty) return '';
 
-    if (firstName.toLowerCase() == 'kimi' && lastName.toLowerCase() == 'antonelli') {
-      return 'https://img2.51gt3.com/rac/racer/202503/bcca7f61b6684e26bb28aedaf8d97c53.png';
+    if (primeiroNome.toLowerCase() == 'kimi' &&
+        sobrenome.toLowerCase() == 'antonelli') {
+      return 'https://www.formulaonehistory.com/wp-content/uploads/2025/12/Kimi-Antonelli-F1-2026.webp';
     }
 
-    final cleanFirst = _removeDiacritics(firstName);
-    final cleanLast = _removeDiacritics(lastName);
-
-    final firstAlpha = cleanFirst.replaceAll(RegExp(r'[^A-Za-z]'), '').padRight(3, 'X');
-    final lastAlpha = cleanLast.replaceAll(RegExp(r'[^A-Za-z]'), '').padRight(3, 'X');
-    final codigo = '${firstAlpha.substring(0, 3).toUpperCase()}${lastAlpha.substring(0, 3).toUpperCase()}01';
-
-    final firstSlug = cleanFirst.trim().replaceAll(RegExp(r'[^A-Za-z0-9 ]'), '').replaceAll(' ', '_');
-    final lastSlug = cleanLast.trim().replaceAll(RegExp(r'[^A-Za-z0-9 ]'), '').replaceAll(' ', '_');
-
-    final inicial = firstSlug.isNotEmpty ? firstSlug[0].toUpperCase() : 'X';
-    final pasta = '${codigo}_${_capitalize(firstSlug)}_${_capitalize(lastSlug)}';
-
-    return 'https://media.formula1.com/image/upload/f_auto/q_auto/v1677244985/content/dam/fom-website/drivers/$inicial/$pasta/${codigo.toLowerCase()}.png';
-  }
-
-  static String _removeDiacritics(String text) {
-    const withDia = 'ÀÁÂÃÄÅàáâãäåÒÓÔÕÕÖØòóôõöøÈÉÊËèéêëðÇçÐÌÍÎÏìíîïÙÚÛÜùúûüÑñŠšŸÿýŽž';
-    const withoutDia = 'AAAAAAaaaaaaOOOOOOOooooooEEEEeeeeeCcDIIIIiiiiUUUUuuuuNnSsYyyZz';
-    for (var i = 0; i < withDia.length; i++) {
-      text = text.replaceAll(withDia[i], withoutDia[i]);
+    if (primeiroNome.toLowerCase() == 'arvid' &&
+        sobrenome.toLowerCase() == 'lindblad') {
+      return 'https://www.formulaonehistory.com/wp-content/uploads/2025/12/Arvid-Lindblad-F1-2026.webp';
     }
-    return text;
+
+    if (primeiroNome.toLowerCase() == 'alex' &&
+        sobrenome.toLowerCase() == 'albon') {
+      return 'https://media.formula1.com/image/upload/f_auto,c_limit,q_75,w_auto/content/dam/fom-website/2018-redesign-assets/drivers/2023/alealb01.png';
+    }
+
+    final codigoPiloto = _gerarCodigoPiloto(primeiroNome, sobrenome);
+
+    final nomeSlug = _primeiraLetraMaiuscula(
+      primeiroNome
+          .replaceAll(RegExp(r'[^A-Za-z0-9 ]'), '')
+          .replaceAll(' ', '_'),
+    );
+    final sobrenomeSlug = _primeiraLetraMaiuscula(
+      sobrenome.replaceAll(RegExp(r'[^A-Za-z0-9 ]'), '').replaceAll(' ', '_'),
+    );
+
+    final inicial = primeiroNome.isNotEmpty
+        ? primeiroNome[0].toUpperCase()
+        : 'X';
+    final pasta = '${codigoPiloto}_${nomeSlug}_${sobrenomeSlug}';
+
+    return 'https://media.formula1.com/image/upload/f_auto/q_auto/v1677244985/content/dam/fom-website/drivers/$inicial/$pasta/${codigoPiloto.toLowerCase()}.png';
   }
 
-  static String _capitalize(String text) {
-    if (text.isEmpty) return text;
-    return text[0].toUpperCase() + text.substring(1).toLowerCase();
+  static String _gerarCodigoPiloto(String primeiroNome, String sobrenome) {
+    final parteNome = primeiroNome
+        .replaceAll(RegExp(r'[^A-Za-z]'), '')
+        .padRight(3, 'X');
+    final parteSobrenome = sobrenome
+        .replaceAll(RegExp(r'[^A-Za-z]'), '')
+        .padRight(3, 'X');
+    return '${parteNome.substring(0, 3).toUpperCase()}${parteSobrenome.substring(0, 3).toUpperCase()}01';
+  }
+
+  static String _primeiraLetraMaiuscula(String texto) {
+    if (texto.isEmpty) return texto;
+    return texto[0].toUpperCase() + texto.substring(1).toLowerCase();
   }
 }

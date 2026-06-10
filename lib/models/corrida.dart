@@ -17,67 +17,57 @@ class Corrida {
     required this.nomeGP,
     required this.circuito,
     required this.data,
-    required this.vencedor,
-    required this.equipeVencedora,
+    this.vencedor = '',
+    this.equipeVencedora = '',
     required this.bandeira,
-    required this.realizada,
-    required this.voltaMaisRapida,
-    required this.pilotoVoltaMaisRapida,
+    this.realizada = false,
+    this.voltaMaisRapida = '-',
+    this.pilotoVoltaMaisRapida = '-',
   });
 
   factory Corrida.fromJson(Map<String, dynamic> json) {
-    final circuitInfo = json['circuit'] as Map<String, dynamic>? ?? {};
-    final scheduleInfo = json['schedule'] as Map<String, dynamic>? ?? {};
-    final raceInfo = scheduleInfo['race'] as Map<String, dynamic>? ?? {};
-    final winnerInfo = json['winner'] as Map<String, dynamic>?;
-    final teamWinnerInfo = json['teamWinner'] as Map<String, dynamic>?;
-    final fastLapInfo = json['fast_lap'] as Map<String, dynamic>? ?? {};
+    final dadosCircuito  = json['circuit']  as Map<String, dynamic>? ?? {};
+    final dadosCorrida   = json['schedule'] as Map<String, dynamic>? ?? {};
+    final dadosRace      = dadosCorrida['race'] as Map<String, dynamic>? ?? {};
+    final dadosVencedor  = json['winner']     as Map<String, dynamic>?;
+    final dadosEquipe    = json['teamWinner'] as Map<String, dynamic>?;
+    final dadosVoltaRapida = json['fast_lap'] as Map<String, dynamic>? ?? {};
 
-    String dataFormatada = 'A Confirmar';
-    if (raceInfo['date'] != null) {
-      final parts = raceInfo['date'].toString().split('-');
-      if (parts.length == 3) {
-        final day = parts[2];
-        final monthStr = _getMonthName(parts[1]);
-        final year = parts[0];
-        dataFormatada = '$day $monthStr $year';
+    final nomePais = dadosCircuito['country']?.toString() ?? 'Desconhecido';
+
+    String data = 'A Confirmar';
+    final dataRaw = dadosRace['date']?.toString();
+    if (dataRaw != null) {
+      final partes = dataRaw.split('-');
+      if (partes.length == 3) {
+        data = '${partes[2]} ${_nomeDoMes(partes[1])} ${partes[0]}';
       }
     }
 
-    final nomePais = circuitInfo['country']?.toString() ?? 'Desconhecido';
-    
-    String vencedorNome = '';
-    String equipeVencedoraNome = '';
-    bool realizada = false;
-    
-    if (winnerInfo != null && winnerInfo.isNotEmpty) {
-      realizada = true;
-      vencedorNome = '${winnerInfo['name']} ${winnerInfo['surname']}';
-      equipeVencedoraNome = teamWinnerInfo?['teamName'] ?? '';
-    }
+    final foiRealizada = dadosVencedor != null && dadosVencedor.isNotEmpty;
+    final nomeVencedor = foiRealizada ? '${dadosVencedor!['name']} ${dadosVencedor['surname']}' : '';
+    final nomeEquipe = dadosEquipe?['teamName']?.toString() ?? '';
 
-    String voltaTempo = fastLapInfo['fast_lap']?.toString() ?? '-';
-    String pilotoVoltaId = fastLapInfo['fast_lap_driver_id']?.toString() ?? '';
-    String pilotoVoltaNome = pilotoVoltaId.split('_').last.toUpperCase();
-    if (pilotoVoltaNome.isEmpty) pilotoVoltaNome = '-';
+    final idPilotoVolta = dadosVoltaRapida['fast_lap_driver_id']?.toString() ?? '';
+    final nomePilotoVolta = idPilotoVolta.isNotEmpty ? idPilotoVolta.split('_').last.toUpperCase() : '-';
 
     return Corrida(
       raceId: json['raceId']?.toString() ?? '',
       nomePais: nomePais,
       nomeGP: json['raceName']?.toString() ?? 'GP Desconhecido',
-      circuito: circuitInfo['circuitName']?.toString() ?? 'Circuito Desconhecido',
-      data: dataFormatada,
-      vencedor: vencedorNome,
-      equipeVencedora: equipeVencedoraNome,
-      bandeira: _getFlag(nomePais),
-      realizada: realizada,
-      voltaMaisRapida: voltaTempo,
-      pilotoVoltaMaisRapida: pilotoVoltaNome,
+      circuito: dadosCircuito['circuitName']?.toString() ?? 'Circuito Desconhecido',
+      data: data,
+      vencedor: nomeVencedor,
+      equipeVencedora: nomeEquipe,
+      bandeira: _bandeiraDoPais(nomePais),
+      realizada: foiRealizada,
+      voltaMaisRapida: dadosVoltaRapida['fast_lap']?.toString() ?? '-',
+      pilotoVoltaMaisRapida: nomePilotoVolta,
     );
   }
 
-  static String _getMonthName(String month) {
-    switch (month) {
+  static String _nomeDoMes(String mes) {
+    switch (mes) {
       case '01': return 'JAN';
       case '02': return 'FEV';
       case '03': return 'MAR';
@@ -94,22 +84,20 @@ class Corrida {
     }
   }
 
-  static String _getFlag(String country) {
-    switch (country.toLowerCase()) {
+  static String _bandeiraDoPais(String pais) {
+    switch (pais.toLowerCase()) {
       case 'australia': return '🇦🇺';
       case 'china': return '🇨🇳';
       case 'japan': return '🇯🇵';
       case 'bahrain': return '🇧🇭';
       case 'saudi arabia': return '🇸🇦';
-      case 'usa':
-      case 'united states': return '🇺🇸';
+      case 'usa': case 'united states': return '🇺🇸';
       case 'italy': return '🇮🇹';
       case 'monaco': return '🇲🇨';
       case 'spain': return '🇪🇸';
       case 'canada': return '🇨🇦';
       case 'austria': return '🇦🇹';
-      case 'great britain':
-      case 'uk': return '🇬🇧';
+      case 'great britain': case 'uk': return '🇬🇧';
       case 'hungary': return '🇭🇺';
       case 'belgium': return '🇧🇪';
       case 'netherlands': return '🇳🇱';
@@ -118,10 +106,8 @@ class Corrida {
       case 'mexico': return '🇲🇽';
       case 'brazil': return '🇧🇷';
       case 'qatar': return '🇶🇦';
-      case 'uae':
-      case 'abu dhabi': return '🇦🇪';
+      case 'uae': case 'abu dhabi': return '🇦🇪';
       default: return '🏳️';
     }
   }
 }
-

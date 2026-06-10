@@ -37,7 +37,7 @@ class TelaDetalheEquipe extends StatelessWidget {
       height: 220,
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [equipe.corEquipe.withValues(alpha:0.8), Color(0xFF111111)],
+          colors: [equipe.cor.withValues(alpha:0.8), Color(0xFF111111)],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
@@ -48,7 +48,7 @@ class TelaDetalheEquipe extends StatelessWidget {
             right: 0,
             bottom: 0,
             child: Image.network(
-              equipe.imagemCarro,
+              equipe.urlCarro,
               height: 160,
               fit: BoxFit.contain,
             ),
@@ -144,7 +144,7 @@ class TelaDetalheEquipe extends StatelessWidget {
                 color: Color(0xFF1A1A1A),
                 borderRadius: BorderRadius.circular(12),
                 border: Border(
-                  left: BorderSide(color: equipe.corEquipe, width: 4),
+                  left: BorderSide(color: equipe.cor, width: 4),
                 ),
               ),
               child: Row(
@@ -158,7 +158,7 @@ class TelaDetalheEquipe extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  Icon(Icons.person, color: equipe.corEquipe, size: 20),
+                  Icon(Icons.person, color: equipe.cor, size: 20),
                 ],
               ),
             );
@@ -183,7 +183,7 @@ class TelaDetalheEquipe extends StatelessWidget {
             ),
           ),
           SizedBox(height: 12),
-          _itemInfo("País", equipe.cor),
+          _itemInfo("País", Equipe.bandeiraDoPais(equipe.nacionalidade)),
           _itemInfo("Pilotos", equipe.pilotos.join(" e ")),
         ],
       ),
