@@ -13,20 +13,12 @@ class TelaCorridas extends StatefulWidget {
 
 class _TelaCorridasState extends State<TelaCorridas> {
   int _indiceBottomNav = 1;
-  late final F1ApiService _apiService;
-  late Future<List<Corrida>> _corridasFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    _apiService = F1ApiService(Dio());
-    _corridasFuture = _apiService.getRaces();
-  }
+  final F1ApiService _apiService = F1ApiService(Dio());
+  late final Future<List<Corrida>> _corridasFuture = _apiService.getRaces();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF111111),
       appBar: AppBar(
         title: Text("Corridas"),
         automaticallyImplyLeading: false,
@@ -77,7 +69,7 @@ class _TelaCorridasState extends State<TelaCorridas> {
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                       decoration: BoxDecoration(
-                        color: Color(0xFFE8002D).withOpacity(0.2),
+                        color: Color(0xFFE8002D).withValues(alpha:0.2),
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(color: Color(0xFFE8002D), width: 1),
                       ),

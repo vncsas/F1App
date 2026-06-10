@@ -9,13 +9,8 @@ class TelaDetalheCorrida extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF111111),
       appBar: AppBar(
         title: Text(corrida.nomeGP),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
       ),
 
       body: SingleChildScrollView(
@@ -25,10 +20,7 @@ class TelaDetalheCorrida extends StatelessWidget {
             _cabecalho(),
             SizedBox(height: 24),
             _secaoInfo(),
-            SizedBox(height: 24),
-            corrida.realizada
-                ? _secaoResultado()
-                : _secaoAguardando(),
+      
 
             SizedBox(height: 32),
           ],
@@ -45,8 +37,8 @@ class TelaDetalheCorrida extends StatelessWidget {
         gradient: LinearGradient(
           colors: [
             corrida.realizada
-                ? Color(0xFF00A19C).withOpacity(0.6)
-                : Color(0xFFE8002D).withOpacity(0.6),
+                ? Color(0xFF00A19C).withValues(alpha:0.6)
+                : Color(0xFFE8002D).withValues(alpha:0.6),
             Color(0xFF111111),
           ],
           begin: Alignment.topCenter,
@@ -85,8 +77,8 @@ class TelaDetalheCorrida extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
             decoration: BoxDecoration(
               color: corrida.realizada
-                  ? Color(0xFF00A19C).withOpacity(0.2)
-                  : Color(0xFFE8002D).withOpacity(0.2),
+                  ? Color(0xFF00A19C).withValues(alpha:0.2)
+                  : Color(0xFFE8002D).withValues(alpha:0.2),
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
                 color: corrida.realizada

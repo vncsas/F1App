@@ -22,8 +22,8 @@ class CardEquipe extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           gradient: LinearGradient(
             colors: [
-              equipe.corEquipe.withOpacity(0.9),
-              equipe.corEquipe.withOpacity(0.3),
+              equipe.corEquipe.withValues(alpha:0.9),
+              equipe.corEquipe.withValues(alpha:0.3),
               Colors.transparent,
             ],
             begin: Alignment.centerLeft,
@@ -113,15 +113,6 @@ class CardEquipe extends StatelessWidget {
                     width: 100,
                     height: 50,
                     fit: BoxFit.contain,
-                    errorBuilder: (context, error, stackTrace) {
-                      debugPrint('Erro ao carregar carro da equipe: $error');
-                      return Container(
-                        width: 100,
-                        height: 50,
-                        color: Colors.white10,
-                        child: Icon(Icons.directions_car, color: Colors.white30),
-                      );
-                    },
                   ),
                 ],
               ),

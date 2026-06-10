@@ -22,8 +22,8 @@ class CardPiloto extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           gradient: LinearGradient(
             colors: [
-              piloto.corEquipe.withOpacity(0.9),
-              piloto.corEquipe.withOpacity(0.3),
+              piloto.corEquipe.withValues(alpha:0.9),
+              piloto.corEquipe.withValues(alpha:0.3),
               Colors.transparent,
             ],
             begin: Alignment.centerLeft,
@@ -104,14 +104,6 @@ class CardPiloto extends StatelessWidget {
                 width: 120,
                 height: 210,
                 fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  debugPrint('Erro ao carregar imagem do piloto: \$error');
-                  return Container(
-                    width: 120,
-                    color: Colors.white10,
-                    child: Icon(Icons.person, color: Colors.white30, size: 40),
-                  );
-                },
               ),
             ),
 

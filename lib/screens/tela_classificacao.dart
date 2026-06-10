@@ -16,66 +16,33 @@ class TelaClassificacao extends StatefulWidget {
 
 class _TelaClassificacaoState extends State<TelaClassificacao>
     with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-  late F1ApiService _apiService;
-  late Future<List<Piloto>> _pilotosFuture;
-  late Future<List<Equipe>> _equipesFuture;
+  late final TabController _tabController = TabController(length: 2, vsync: this);
+  final F1ApiService _apiService = F1ApiService(Dio());
+  late final Future<List<Piloto>> _pilotosFuture = _apiService.getDrivers();
+  late final Future<List<Equipe>> _equipesFuture = _loadEquipes();
   int _indiceBottomNav = 0;
 
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-    _apiService = F1ApiService(Dio());
-    _pilotosFuture = _apiService.getDrivers();
-    _equipesFuture = _loadEquipes();
-  }
-
   Future<List<Equipe>> _loadEquipes() async {
-    final teams = await _apiService.getTeams();
+    final equipes = await _apiService.getTeams();
     final pilotos = await _pilotosFuture;
 
-    final equipesIncompletas = teams.map((team) {
-      final equipe = Equipe.fromTeamModel(team);
-      double pontos = 0;
-      List<String> nomesPilotos = [];
-      
+    final agregadas = equipes.map((base) {
+      var pontos = 0.0;
+      final nomesPilotos = <String>[];
+
       for (final p in pilotos) {
-        if (p.equipe.toLowerCase() == equipe.nome.toLowerCase() || p.teamId == team.teamId) {
+        if (p.equipe.toLowerCase() == base.nome.toLowerCase() || p.teamId == base.teamId) {
           pontos += p.pontos;
           nomesPilotos.add(p.nome);
         }
       }
-      return Equipe(
-        nome: equipe.nome,
-        cor: equipe.cor,
-        corEquipe: equipe.corEquipe,
-        motor: equipe.motor,
-        posicao: 0,
-        pontos: pontos,
-        pilotos: nomesPilotos,
-        imagemCarro: equipe.imagemCarro,
-      );
+      return base.copyWith(pontos: pontos, pilotos: nomesPilotos);
     }).toList();
 
-    equipesIncompletas.sort((a, b) => b.pontos.compareTo(a.pontos));
-    
-    final equipes = <Equipe>[];
-    for (int i = 0; i < equipesIncompletas.length; i++) {
-      final eq = equipesIncompletas[i];
-      equipes.add(Equipe(
-        nome: eq.nome,
-        cor: eq.cor,
-        corEquipe: eq.corEquipe,
-        motor: eq.motor,
-        posicao: i + 1,
-        pontos: eq.pontos,
-        pilotos: eq.pilotos,
-        imagemCarro: eq.imagemCarro,
-      ));
-    }
-    
-    return equipes;
+    agregadas.sort((a, b) => b.pontos.compareTo(a.pontos));
+    return [
+      for (var i = 0; i < agregadas.length; i++) agregadas[i].copyWith(posicao: i + 1),
+    ];
   }
 
   @override
@@ -87,7 +54,6 @@ class _TelaClassificacaoState extends State<TelaClassificacao>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF111111),
       appBar: AppBar(
         title: Text("Classificação"),
         bottom: TabBar(

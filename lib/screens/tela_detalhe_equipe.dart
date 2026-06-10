@@ -9,13 +9,8 @@ class TelaDetalheEquipe extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF111111),
       appBar: AppBar(
         title: Text(equipe.nome),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
       ),
 
       body: SingleChildScrollView(
@@ -42,7 +37,7 @@ class TelaDetalheEquipe extends StatelessWidget {
       height: 220,
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [equipe.corEquipe.withOpacity(0.8), Color(0xFF111111)],
+          colors: [equipe.corEquipe.withValues(alpha:0.8), Color(0xFF111111)],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
@@ -56,14 +51,6 @@ class TelaDetalheEquipe extends StatelessWidget {
               equipe.imagemCarro,
               height: 160,
               fit: BoxFit.contain,
-              errorBuilder: (context, error, stackTrace) => Padding(
-                padding: EdgeInsets.all(16),
-                child: Icon(
-                  Icons.directions_car,
-                  size: 80,
-                  color: equipe.corEquipe,
-                ),
-              ),
             ),
           ),
 

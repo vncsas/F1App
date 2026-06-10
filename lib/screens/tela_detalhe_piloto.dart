@@ -9,13 +9,8 @@ class TelaDetalhePiloto extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF111111),
       appBar: AppBar(
         title: Text("Detalhes do Piloto"),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
       ),
 
       body: SingleChildScrollView(
@@ -45,7 +40,7 @@ class TelaDetalhePiloto extends StatelessWidget {
       height: 280,
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [piloto.corEquipe.withOpacity(0.8), Color(0xFF111111)],
+          colors: [piloto.corEquipe.withValues(alpha:0.8), Color(0xFF111111)],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
@@ -59,8 +54,6 @@ class TelaDetalhePiloto extends StatelessWidget {
               piloto.imagem,
               height: 260,
               fit: BoxFit.contain,
-              errorBuilder: (context, error, stackTrace) =>
-                  Icon(Icons.person, size: 100, color: Colors.white24),
             ),
           ),
 
@@ -178,8 +171,6 @@ class TelaDetalhePiloto extends StatelessWidget {
               width: 80,
               height: 48,
               fit: BoxFit.contain,
-              errorBuilder: (context, error, stackTrace) =>
-                  Icon(Icons.directions_car, color: piloto.corEquipe, size: 48),
             ),
           ],
         ),
