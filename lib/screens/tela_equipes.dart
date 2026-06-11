@@ -30,12 +30,12 @@ class _TelaEquipesState extends State<TelaEquipes> {
           nomesPilotos.add(p.nome);
         }
       }
-      return base.copyWith(pontos: pontos, pilotos: nomesPilotos);
+      return base.comDados(pontos: pontos, pilotos: nomesPilotos);
     }).toList();
 
     agregadas.sort((a, b) => b.pontos.compareTo(a.pontos));
     return [
-      for (var i = 0; i < agregadas.length; i++) agregadas[i].copyWith(posicao: i + 1),
+      for (var i = 0; i < agregadas.length; i++) agregadas[i].comDados(posicao: i + 1),
     ];
   }
 
