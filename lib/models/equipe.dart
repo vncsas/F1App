@@ -29,7 +29,6 @@ const slugsEquipes = {
   'cadillac':'haas-f1-team',
   'williams':'williams',
   'sauber':'alfa-romeo',
-  'alfa':'alfa-romeo',
   'audi':'alfa-romeo',
   'rb':'alphatauri',
   'racing bulls':'alphatauri',
@@ -38,7 +37,7 @@ const slugsEquipes = {
 
 Color corDaEquipe(String nomeEquipe) {
   final nome = nomeEquipe.toLowerCase();
-  for (final chave in coresEquipes.keys) {
+  for (var chave in coresEquipes.keys) {
     if (nome.contains(chave)) return coresEquipes[chave]!;
   }
   return const Color.fromARGB(255, 48, 48, 48);
@@ -46,7 +45,7 @@ Color corDaEquipe(String nomeEquipe) {
 
 String carroDaEquipe(String nomeEquipe) {
   final nome = nomeEquipe.toLowerCase();
-  var slug = 'mercedes';
+  var slug = 'carro';
   for (final chave in slugsEquipes.keys) {
     if (nome.contains(chave)) {
       slug = slugsEquipes[chave]!;
@@ -78,13 +77,13 @@ class Equipe {
   });
 
   factory Equipe.fromJson(Map<String, dynamic> json) {
-    final nome = json['teamName']?.toString().trim() ?? 'Equipe Desconhecida';
-    final nacionalidade = json['teamNationality']?.toString().trim() ?? 'N/A';
+    final nome = json['teamName'].toString();
+    final nacionalidade = json['teamNationality'].toString();
 
     return Equipe(
-      teamId: json['teamId']?.toString() ?? '',
-      nome: nome.isNotEmpty ? nome : 'Equipe Desconhecida',
-      nacionalidade: nacionalidade.isNotEmpty ? nacionalidade : 'N/A',
+      teamId: json['teamId'].toString(),
+      nome: nome,
+      nacionalidade: nacionalidade,
       cor: corDaEquipe(nome),
       posicao: 0,
       pontos: 0,
@@ -93,11 +92,7 @@ class Equipe {
     );
   }
 
-  Equipe comDados({
-    int? posicao,
-    double? pontos,
-    List<String>? pilotos,
-  }) {
+  Equipe copyWith({int? posicao,double? pontos,List<String>? pilotos,}) {
     return Equipe(
       teamId: teamId,
       nome: nome,

@@ -20,39 +20,37 @@ class _TelaEquipesState extends State<TelaEquipes> {
     final equipes = await _apiService.getTeams();
     final pilotos = await _apiService.getDrivers();
 
-    final agregadas = equipes.map((base) {
-      var pontos = 0.0;
+    final agregadas = equipes.map((equipe) {
+      double pontos = 0.0;
       final nomesPilotos = <String>[];
 
-      for (final p in pilotos) {
-        if (p.equipe.toLowerCase() == base.nome.toLowerCase() || p.teamId == base.teamId) {
-          pontos += p.pontos;
-          nomesPilotos.add(p.nome);
+      for (final piloto in pilotos) {
+        if (piloto.teamId == equipe.teamId) {
+          pontos += piloto.pontos;
+          nomesPilotos.add(piloto.nome);
         }
       }
-      return base.comDados(pontos: pontos, pilotos: nomesPilotos);
+      return equipe.copyWith(pontos: pontos, pilotos: nomesPilotos);
     }).toList();
 
     agregadas.sort((a, b) => b.pontos.compareTo(a.pontos));
-    return [
-      for (var i = 0; i < agregadas.length; i++) agregadas[i].comDados(posicao: i + 1),
-    ];
+    for (var i = 0; i < agregadas.length; i++) {
+      agregadas[i] = agregadas[i].copyWith(posicao: i + 1);
+    }
+
+    return agregadas;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Equipes"),
-      ),
+      appBar: AppBar(title: Text("Equipes")),
       body: FutureBuilder<List<Equipe>>(
         future: _equipesFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
             return Center(
-              child: CircularProgressIndicator(
-                color: Color(0xFFE8002D),
-              ),
+              child: CircularProgressIndicator(color: Color(0xFFE8002D)),
             );
           }
 
@@ -93,7 +91,8 @@ class _TelaEquipesState extends State<TelaEquipes> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => TelaDetalheEquipe(equipe: equipes[index]),
+                      builder: (context) =>
+                          TelaDetalheEquipe(equipe: equipes[index]),
                     ),
                   );
                 },
