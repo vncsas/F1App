@@ -88,7 +88,6 @@ class CardEquipe extends StatelessWidget {
                 ),
               ),
             ),
-
             Padding(
               padding: EdgeInsets.only(right: 16),
               child: Row(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'screens/splash_screen.dart';
+import 'screens/tela_pilotos.dart';
 
 class F1App extends StatelessWidget {
   @override
@@ -27,7 +27,7 @@ class F1App extends StatelessWidget {
           ),
         ),
       ),
-      home: SplashScreen(),
+      home: TelaPilotos(),
     );
   }
 }

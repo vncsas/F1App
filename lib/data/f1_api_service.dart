@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import '../models/piloto.dart';
-import '../models/corrida.dart';
 import '../models/equipe.dart';
 
 class F1ApiService {
@@ -28,19 +27,6 @@ class F1ApiService {
       return drivers;
     } catch (e) {
       debugPrint("Erro na busca dos pilotos: $e");
-      return [];
-    }
-  }
-
-  Future<List<Corrida>> getRaces() async {
-    try {
-      final response = await dio.get("$legacyBaseUrl/current");
-      final list = (response.data['races'] ?? []) as List<dynamic>;
-      return list
-          .map((c) => Corrida.fromJson(c as Map<String, dynamic>))
-          .toList();
-    } catch (e) {
-      debugPrint("Erro na busca das corridas: $e");
       return [];
     }
   }
