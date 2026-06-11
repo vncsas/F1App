@@ -44,7 +44,6 @@ class _TelaEquipesState extends State<TelaEquipes> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Equipes"),
-        automaticallyImplyLeading: false,
       ),
       body: FutureBuilder<List<Equipe>>(
         future: _equipesFuture,
