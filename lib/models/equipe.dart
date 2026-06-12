@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 const coresEquipes = {
   'mercedes': Color(0xFF00A19C),
   'ferrari': Color(0xFF9B0000),
@@ -11,8 +10,8 @@ const coresEquipes = {
   'alpine':Color(0xFF0090FF),
   'haas':Color(0xFFFFFFFF),
   'williams':Color(0xFF005AFF),
-  'sauber':Color(0xFF8B0000),
-  'alfa':Color(0xFF8B0000),
+  'audi':Color.fromARGB(255, 54, 50, 50),
+  'cadillac':Color.fromARGB(255, 0, 0, 0),
   'rb':Color(0xFF1A1AFF),
   'racing bulls':Color(0xFF1A1AFF),
 };

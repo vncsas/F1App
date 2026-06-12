@@ -33,8 +33,8 @@ class Piloto {
   factory Piloto.fromJson(Map<String, dynamic> json) {
     final dadosPiloto = json['driver'] as Map<String, dynamic>? ?? const {};
     final dadosEquipe = json['team'] as Map<String, dynamic>? ?? const {};
-    var primeiroNome = dadosPiloto['name']?.toString() ?? '';
-    var sobrenome = dadosPiloto['surname']?.toString() ?? '';
+    var primeiroNome = dadosPiloto['name'].toString();
+    var sobrenome = dadosPiloto['surname'].toString();
     var nomeEquipe = dadosEquipe['teamName']?.toString() ?? '';
 
     if (primeiroNome.toLowerCase() == 'andrea' && sobrenome.toLowerCase().contains('antonelli')) {
@@ -64,7 +64,6 @@ class Piloto {
   }
 
   static String _montarUrlFoto(String primeiroNome, String sobrenome) {
-    if (primeiroNome.isEmpty || sobrenome.isEmpty) return '';
 
     if (primeiroNome.toLowerCase() == 'kimi' && sobrenome.toLowerCase() == 'antonelli') {
       return 'https://www.formulaonehistory.com/wp-content/uploads/2025/12/Kimi-Antonelli-F1-2026.webp';
@@ -80,10 +79,10 @@ class Piloto {
 
     final codigoPiloto = _gerarCodigoPiloto(primeiroNome, sobrenome);
     final nomeSlug = _primeiraLetraMaiuscula(
-      primeiroNome.replaceAll(RegExp(r'[^A-Za-z0-9 ]'), '').replaceAll(' ', '_'),
+      primeiroNome.replaceAll(' ', '_'),
     );
     final sobrenomeSlug = _primeiraLetraMaiuscula(
-      sobrenome.replaceAll(RegExp(r'[^A-Za-z0-9 ]'), '').replaceAll(' ', '_'),
+      sobrenome.replaceAll(' ', '_'),
     );
 
     final inicial = primeiroNome[0].toUpperCase();
@@ -93,9 +92,7 @@ class Piloto {
   }
 
   static String _gerarCodigoPiloto(String primeiroNome, String sobrenome) {
-    final parteNome = primeiroNome.replaceAll(RegExp(r'[^A-Za-z]'), '');
-    final parteSobrenome = sobrenome.replaceAll(RegExp(r'[^A-Za-z]'), '');
-    return '${parteNome.substring(0, 3).toUpperCase()}${parteSobrenome.substring(0, 3).toUpperCase()}01';
+    return '${primeiroNome.substring(0, 3).toUpperCase()}${sobrenome.substring(0, 3).toUpperCase()}01';
   }
 
   static String _primeiraLetraMaiuscula(String texto) {
